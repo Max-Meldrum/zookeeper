@@ -586,6 +586,10 @@ public class Leader {
                         }
                     }
 
+                    /*
+                     * MAX MELDRUM
+                     * TODO: change so hasAllQuorums() checks with leaderElection quorum instead of majority
+                     */
                     if (!tickSkip && !syncedAckSet.hasAllQuorums()) {
                         // Lost quorum of last committed and/or last proposed
                         // config, set shutdown flag
@@ -716,6 +720,10 @@ public class Leader {
        if (outstandingProposals.containsKey(zxid - 1)) return false;
        
        // getting a quorum from all necessary configurations
+        /*
+         * MAX MELDRUM
+         * TODO: Change to check with atomicBroadcastQuorum instead of majority.
+         */
         if (!p.hasAllQuorums()) {
            return false;                 
         }
@@ -1167,6 +1175,11 @@ public class Leader {
             }
             connectingFollowers.add(sid);
             QuorumVerifier verifier = self.getQuorumVerifier();
+            /*
+             * MAX MELDRUM
+             * TODO: Change containsQuorum to leaderElectionQuorum instead of majority
+             * TODO: Confirm that this is for leader election
+             */
             if (connectingFollowers.contains(self.getId()) &&
                                             verifier.containsQuorum(connectingFollowers)) {
                 waitingForNewEpoch = false;
@@ -1206,6 +1219,11 @@ public class Leader {
                 electingFollowers.add(id);
             }
             QuorumVerifier verifier = self.getQuorumVerifier();
+            /*
+             * MAX MELDRUM
+             * TODO: Change from Majority to leaderElectionQuorum
+             * containsQuorum -> electionContainsQuorum
+             */
             if (electingFollowers.contains(self.getId()) && verifier.containsQuorum(electingFollowers)) {
                 electionFinished = true;
                 electingFollowers.notifyAll();
@@ -1311,7 +1329,10 @@ public class Leader {
              * is a PARTICIPANT.
              */
             newLeaderProposal.addAck(sid);
-
+            /*
+             * MAX MELDRUM
+             * TODO: Change hasAllQuorums() to use leaderElectionQuorum instead of majority
+             */
             if (newLeaderProposal.hasAllQuorums()) {
                 quorumFormed = true;
                 newLeaderProposal.qvAcksetPairs.notifyAll();
