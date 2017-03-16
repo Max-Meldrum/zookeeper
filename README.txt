@@ -3,6 +3,8 @@ An attempt to modify ZooKeeper to use a more flexbile quorum system than majorit
 The changes are based on the paper "Flexible Paxos: Quorum intersection revisited"
 Link: https://arxiv.org/pdf/1608.06696.pdf
 
+The FlexibleZoo branch is based on the 3.5.2 release of ZooKeeper.
+
 Original README text is found below.
 
 For the latest information about ZooKeeper, please visit our website at:
