@@ -1,3 +1,10 @@
+An attempt to modify ZooKeeper to use a more flexbile quorum system than majority, which is the default one. 
+
+The changes are based on the paper "Flexible Paxos: Quorum intersection revisited"
+Link: https://arxiv.org/pdf/1608.06696.pdf
+
+Original README text is found below.
+
 For the latest information about ZooKeeper, please visit our website at:
 
    http://zookeeper.apache.org/
