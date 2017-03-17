@@ -16,6 +16,11 @@
  * limitations under the License.
  */
 
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
+
 package org.apache.zookeeper.server.quorum;
 
 import java.util.ArrayList;
@@ -51,6 +56,31 @@ public class SyncedLearnerTracker {
         }
         return true;
     }
+
+    /**
+     * Returns true if it meets the quorum for Leader Election, otherwise false.
+     * <Max Meldrum>
+     */
+    public boolean hasAllElectionQuorums() {
+        for (QuorumVerifierAcksetPair qvAckset : qvAcksetPairs) {
+            if (!qvAckset.getQuorumVerifier().containsElectionQuorum(qvAckset.getAckset()))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Returns true if it meets the quorum for Atomic Broadcast, otherwise false.
+     * <Max Meldrum>
+     */
+    public boolean hasAllAtomicBroadcastQuorums() {
+        for (QuorumVerifierAcksetPair qvAckset : qvAcksetPairs) {
+            if (!qvAckset.getQuorumVerifier().containsAtomicBroadcastQuorum(qvAckset.getAckset()))
+                return false;
+        }
+        return true;
+    }
+
         
     public String ackSetsToString(){
         StringBuilder sb = new StringBuilder();

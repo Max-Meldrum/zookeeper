@@ -586,11 +586,12 @@ public class Leader {
                         }
                     }
 
-                    /*
-                     * MAX MELDRUM
-                     * TODO: change so hasAllQuorums() checks with leaderElection quorum instead of majority
+                    /**
+                     * Now it checks with the ElectionQuorum instead of a majority check
+                     * hasAllQuorums() -> hasAllElectionQuorums()
+                     * <Max Meldrum>
                      */
-                    if (!tickSkip && !syncedAckSet.hasAllQuorums()) {
+                    if (!tickSkip && !syncedAckSet.hasAllElectionQuorums()) {
                         // Lost quorum of last committed and/or last proposed
                         // config, set shutdown flag
                         shutdownMessage = "Not sufficient followers synced, only synced with sids: [ "
@@ -720,11 +721,13 @@ public class Leader {
        if (outstandingProposals.containsKey(zxid - 1)) return false;
        
        // getting a quorum from all necessary configurations
-        /*
-         * MAX MELDRUM
-         * TODO: Change to check with atomicBroadcastQuorum instead of majority.
+
+        /**
+         * Now checks with Atomic Broadcast quorum instead of a majority check
+         * hasAllQuorums() -> hasAllAtomicBroadcastQuorums()
+         * <Max Meldrum>
          */
-        if (!p.hasAllQuorums()) {
+        if (!p.hasAllAtomicBroadcastQuorums()) {
            return false;                 
         }
         
@@ -1219,12 +1222,12 @@ public class Leader {
                 electingFollowers.add(id);
             }
             QuorumVerifier verifier = self.getQuorumVerifier();
-            /*
-             * MAX MELDRUM
-             * TODO: Change from Majority to leaderElectionQuorum
+            /**
+             * Now checks with ElectionQuorum instead of a majority
              * containsQuorum -> electionContainsQuorum
+             * <Max Meldrum>
              */
-            if (electingFollowers.contains(self.getId()) && verifier.containsQuorum(electingFollowers)) {
+            if (electingFollowers.contains(self.getId()) && verifier.containsElectionQuorum(electingFollowers)) {
                 electionFinished = true;
                 electingFollowers.notifyAll();
             } else {
@@ -1329,11 +1332,12 @@ public class Leader {
              * is a PARTICIPANT.
              */
             newLeaderProposal.addAck(sid);
-            /*
-             * MAX MELDRUM
-             * TODO: Change hasAllQuorums() to use leaderElectionQuorum instead of majority
+            /**
+             * Now hasAllElectionQuorums() is called instead of a majority check
+             * hasAllQuorums() -> hasAllElectionQuorums()
+             * <Max Meldrum>
              */
-            if (newLeaderProposal.hasAllQuorums()) {
+            if (newLeaderProposal.hasAllElectionQuorums()) {
                 quorumFormed = true;
                 newLeaderProposal.qvAcksetPairs.notifyAll();
             } else {
