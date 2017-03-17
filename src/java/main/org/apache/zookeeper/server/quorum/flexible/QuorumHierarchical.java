@@ -16,6 +16,10 @@
  * limitations under the License.
  */
 
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
 package org.apache.zookeeper.server.quorum.flexible;
 
 import java.io.File;
