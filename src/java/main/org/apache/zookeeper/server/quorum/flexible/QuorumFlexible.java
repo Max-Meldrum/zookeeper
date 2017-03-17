@@ -43,8 +43,8 @@ public class QuorumFlexible implements QuorumVerifier {
     private long version = 0;
     private int half;
     // Flexible Paxos : Q1 = 4, Q2 = 2
-    private int electionQuorum = 3;
-    private int atomicBroadcastQuorum = 3;
+    private int electionQuorum = 4;
+    private int atomicBroadcastQuorum = 2;
 
     public int hashCode() {
         assert false : "hashCode not designed";
