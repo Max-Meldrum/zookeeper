@@ -42,9 +42,9 @@ public class QuorumFlexible implements QuorumVerifier {
     private HashMap<Long, QuorumServer> observingMembers = new HashMap<Long, QuorumServer>();
     private long version = 0;
     private int half;
-    // Flexible Paxos : Q1 = 3, Q2 = 2
+    // Flexible Paxos : Q1 = 4, Q2 = 2
     private int electionQuorum = 3;
-    private int atomicBroadcastQuorum = 2;
+    private int atomicBroadcastQuorum = 3;
 
     public int hashCode() {
         assert false : "hashCode not designed";
@@ -52,16 +52,16 @@ public class QuorumFlexible implements QuorumVerifier {
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof QuorumMaj)) {
+        if (!(o instanceof QuorumFlexible)) {
             return false;
         }
-        QuorumMaj qm = (QuorumMaj) o;
-        if (qm.getVersion() == version)
+        QuorumFlexible qf = (QuorumFlexible) o;
+        if (qf.getVersion() == version)
             return true;
-        if (allMembers.size() != qm.getAllMembers().size())
+        if (allMembers.size() != qf.getAllMembers().size())
             return false;
         for (QuorumServer qs : allMembers.values()) {
-            QuorumServer qso = qm.getAllMembers().get(qs.id);
+            QuorumServer qso = qf.getAllMembers().get(qs.id);
             if (qso == null || !qs.equals(qso))
                 return false;
         }
