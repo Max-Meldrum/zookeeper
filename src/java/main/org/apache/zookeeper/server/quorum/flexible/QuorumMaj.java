@@ -16,6 +16,10 @@
  * limitations under the License.
  */
 
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
 package org.apache.zookeeper.server.quorum.flexible;
 
 import java.util.HashMap;
@@ -132,6 +136,25 @@ public class QuorumMaj implements QuorumVerifier {
      */
     public boolean containsQuorum(Set<Long> ackSet) {
         return (ackSet.size() > half);
+    }
+
+    /**
+     * Verifies if a set has enough quorum for Leader Election
+     * <Max Meldrum>
+     *
+     */
+    public boolean containsElectionQuorum(Set<Long> ackSet) {
+        // Is not meant to be used
+        return containsQuorum(ackSet);
+    }
+
+    /**
+     * Verifies if a set has enough quorum for Atomic Broadcast
+     * <Max Meldrum>
+     */
+    public boolean containsAtomicBroadcastQuorum(Set<Long> ackSet) {
+        // Is not meant to be used
+        return containsQuorum(ackSet);
     }
 
     public Map<Long, QuorumServer> getAllMembers() {

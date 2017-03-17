@@ -16,6 +16,10 @@
  * limitations under the License.
  */
 
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
 package org.apache.zookeeper.server.quorum.flexible;
 
 import java.util.Set;
@@ -33,6 +37,8 @@ import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 public interface QuorumVerifier {
     long getWeight(long id);
     boolean containsQuorum(Set<Long> set);
+    boolean containsElectionQuorum(Set<Long> set); // Added modification <Max Meldrum>
+    boolean containsAtomicBroadcastQuorum(Set<Long> set); // Added modification <Max Meldrum>
     long getVersion();
     void setVersion(long ver);
     Map<Long, QuorumServer> getAllMembers();

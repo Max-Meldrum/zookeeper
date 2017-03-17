@@ -16,6 +16,11 @@
  * limitations under the License.
  */
 
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
+
 package org.apache.zookeeper.server.quorum.flexible;
 
 import java.util.HashMap;
@@ -29,9 +34,7 @@ import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 
 /**
- * This class implements a validator for Flexible (FPaxos) quorums. The implementation is
- * straightforward.
- *
+ * This class implements a validator for Flexible (FPaxos) quorums.
  */
 public class QuorumFlexible implements QuorumVerifier {
     private Map<Long, QuorumServer> allMembers = new HashMap<Long, QuorumServer>();
@@ -137,14 +140,22 @@ public class QuorumFlexible implements QuorumVerifier {
         return (ackSet.size() > half);
     }
 
-    // Split up the checks for Q1, Q2
-    public boolean electionContainsQuorum(Set<Long> ackSet) {
+    /**
+     * Verifies if a set has enough quorum for Leader Election
+     * <Max Meldrum>
+     */
+    public boolean containsElectionQuorum(Set<Long> ackSet) {
         return (ackSet.size() >= electionQuorum);
     }
 
-    public boolean atomicBroadcastContainsQuorum(Set<Long> ackSet) {
+    /**
+     * Verifies if a set has enough quorum for Atomic Broadcast
+     * <Max Meldrum>
+     */
+    public boolean containsAtomicBroadcastQuorum(Set<Long> ackSet) {
         return (ackSet.size() >= atomicBroadcastQuorum);
     }
+
 
     public Map<Long, QuorumServer> getAllMembers() {
         return allMembers;

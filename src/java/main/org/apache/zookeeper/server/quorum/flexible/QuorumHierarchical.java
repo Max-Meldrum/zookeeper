@@ -359,12 +359,33 @@ public class QuorumHierarchical implements QuorumVerifier {
             LOG.debug("Negative set size: " + set.size());
             return false;
         }
-    }  
-    public Map<Long, QuorumServer> getVotingMembers() {        
+    }
+
+
+    /**
+     * Verifies if a set has enough quorum for Leader Election
+     * <Max Meldrum>
+     *
+     */
+    public boolean containsElectionQuorum(Set<Long> ackSet) {
+        // Is not meant to be used
+        return containsQuorum(ackSet);
+    }
+
+    /**
+     * Verifies if a set has enough quorum for Atomic Broadcast
+     * <Max Meldrum>
+     */
+    public boolean containsAtomicBroadcastQuorum(Set<Long> ackSet) {
+        // Is not meant to be used
+        return containsQuorum(ackSet);
+    }
+
+    public Map<Long, QuorumServer> getVotingMembers() {
        return participatingMembers;
    }
 
-   public Map<Long, QuorumServer> getObservingMembers() {      
+   public Map<Long, QuorumServer> getObservingMembers() {
        return observingMembers;
    }
 
