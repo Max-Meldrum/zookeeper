@@ -15,6 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
 package org.apache.zookeeper.server.quorum;
 
 import java.io.BufferedReader;
@@ -59,6 +64,7 @@ import org.apache.zookeeper.server.admin.AdminServerFactory;
 import org.apache.zookeeper.server.persistence.FileTxnSnapLog;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 import org.apache.zookeeper.server.quorum.flexible.QuorumMaj;
+import org.apache.zookeeper.server.quorum.flexible.QuorumFlexible;
 import org.apache.zookeeper.server.quorum.flexible.QuorumVerifier;
 import org.apache.zookeeper.server.util.ZxidUtils;
 import org.slf4j.Logger;
@@ -714,7 +720,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
             ServerCnxnFactory cnxnFactory) throws IOException {
         this(quorumPeers, dataDir, dataLogDir, electionType, myid, tickTime,
                 initLimit, syncLimit, false, cnxnFactory,
-                new QuorumMaj(quorumPeers));
+                new QuorumFlexible(quorumPeers)); // Changed to QuorumFlexible
     }
 
     public QuorumPeer(Map<Long, QuorumServer> quorumPeers, File dataDir,
@@ -733,7 +739,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
         this.quorumListenOnAllIPs = quorumListenOnAllIPs;
         this.logFactory = new FileTxnSnapLog(dataLogDir, dataDir);
         this.zkDb = new ZKDatabase(this.logFactory);
-        if(quorumConfig == null) quorumConfig = new QuorumMaj(quorumPeers);
+        if(quorumConfig == null) quorumConfig = new QuorumFlexible(quorumPeers); // changed to QuorumFlexible
         setQuorumVerifier(quorumConfig, false);
         adminServer = AdminServerFactory.createAdminServer();
     }
@@ -861,7 +867,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
     {
         this(quorumPeers, snapDir, logDir, electionAlg, myid, tickTime, initLimit, syncLimit, false,
                 ServerCnxnFactory.createFactory(getClientAddress(quorumPeers, myid, clientPort), -1),
-                new QuorumMaj(quorumPeers));
+                new QuorumFlexible(quorumPeers)); // Changed to QuorumFlexible
     }
 
     /**

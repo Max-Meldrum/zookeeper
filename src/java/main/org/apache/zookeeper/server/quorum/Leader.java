@@ -1178,13 +1178,13 @@ public class Leader {
             }
             connectingFollowers.add(sid);
             QuorumVerifier verifier = self.getQuorumVerifier();
-            /*
-             * MAX MELDRUM
-             * TODO: Change containsQuorum to leaderElectionQuorum instead of majority
-             * TODO: Confirm that this is for leader election
+            /**
+             * Now checks with Election Quorum instead of a majority check
+             * containsQuorum() -> containsElectionQuorum()
+             * <Max Meldrum>
              */
             if (connectingFollowers.contains(self.getId()) &&
-                                            verifier.containsQuorum(connectingFollowers)) {
+                                            verifier.containsElectionQuorum(connectingFollowers)) {
                 waitingForNewEpoch = false;
                 self.setAcceptedEpoch(epoch);
                 connectingFollowers.notifyAll();
