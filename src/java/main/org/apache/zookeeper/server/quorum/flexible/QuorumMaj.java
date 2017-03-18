@@ -43,6 +43,7 @@ public class QuorumMaj implements QuorumVerifier {
     private HashMap<Long, QuorumServer> observingMembers = new HashMap<Long, QuorumServer>();
     private long version = 0;
     private int half;
+    private String quorumSystem = "Majority";
 
     public int hashCode() {
         assert false : "hashCode not designed";
@@ -128,7 +129,11 @@ public class QuorumMaj implements QuorumVerifier {
         sw.append("version=");
         sw.append(hexVersion);
         return sw.toString();
-    }    
+    }
+
+    public String getQuorumSystem() {
+        return quorumSystem;
+    }
 
     /**
      * Verifies if a set is a majority. Assumes that ackSet contains acks only

@@ -46,4 +46,5 @@ public interface QuorumVerifier {
     Map<Long, QuorumServer> getObservingMembers();
     boolean equals(Object o);
     String toString();
+    String getQuorumSystem(); // Added modification <Max Meldrum>
 }

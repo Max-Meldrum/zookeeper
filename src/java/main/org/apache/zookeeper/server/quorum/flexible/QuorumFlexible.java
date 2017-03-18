@@ -42,9 +42,10 @@ public class QuorumFlexible implements QuorumVerifier {
     private HashMap<Long, QuorumServer> observingMembers = new HashMap<Long, QuorumServer>();
     private long version = 0;
     private int half;
+    private String quorumSystem = "Flexible";
     // Flexible Paxos : Q1 = 4, Q2 = 2
-    private int electionQuorum = 4;
-    private int atomicBroadcastQuorum = 2;
+    private int electionQuorum = 3;
+    private int atomicBroadcastQuorum = 1;
 
     public int hashCode() {
         assert false : "hashCode not designed";
@@ -82,6 +83,17 @@ public class QuorumFlexible implements QuorumVerifier {
             }
         }
         half = votingMembers.size() / 2;
+
+        if (votingMembers.size() == 3) {
+            electionQuorum = (votingMembers.size() / 2);
+            atomicBroadcastQuorum = (votingMembers.size() /2);
+        } else if (votingMembers.size() == 5) {
+            electionQuorum = 2;
+            atomicBroadcastQuorum = 2;
+        } else {
+            electionQuorum = (votingMembers.size() / 2);
+            atomicBroadcastQuorum = (votingMembers.size() /2);
+        }
     }
 
     public QuorumFlexible(Properties props) throws ConfigException {
@@ -132,6 +144,10 @@ public class QuorumFlexible implements QuorumVerifier {
         return sw.toString();
     }
 
+    public String getQuorumSystem() {
+        return quorumSystem;
+    }
+
     /**
      * Verifies if a set is a majority. Assumes that ackSet contains acks only
      * from votingMembers
@@ -145,7 +161,7 @@ public class QuorumFlexible implements QuorumVerifier {
      * <Max Meldrum>
      */
     public boolean containsElectionQuorum(Set<Long> ackSet) {
-        return (ackSet.size() >= electionQuorum);
+        return (ackSet.size() > electionQuorum);
     }
 
     /**
@@ -153,7 +169,7 @@ public class QuorumFlexible implements QuorumVerifier {
      * <Max Meldrum>
      */
     public boolean containsAtomicBroadcastQuorum(Set<Long> ackSet) {
-        return (ackSet.size() >= atomicBroadcastQuorum);
+        return (ackSet.size() > atomicBroadcastQuorum);
     }
 
 

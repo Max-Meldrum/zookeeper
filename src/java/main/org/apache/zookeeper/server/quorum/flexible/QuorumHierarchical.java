@@ -78,6 +78,7 @@ public class QuorumHierarchical implements QuorumVerifier {
     private HashMap<Long, Long> groupWeight = new HashMap<Long, Long>();
     
     private int numGroups = 0;
+    private String quorumSystem = "Hierarchical";
    
     private Map<Long, QuorumServer> allMembers = new HashMap<Long, QuorumServer>();
     private Map<Long, QuorumServer> participatingMembers = new HashMap<Long, QuorumServer>();
@@ -291,6 +292,10 @@ public class QuorumHierarchical implements QuorumVerifier {
        sw.append("version=" + Long.toHexString(version));
        
        return sw.toString();        
+    }
+
+    public String getQuorumSystem() {
+        return quorumSystem;
     }
     
     /**
