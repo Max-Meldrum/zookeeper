@@ -16,6 +16,10 @@
  * limitations under the License.
  */
 
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
 package org.apache.zookeeper.server.quorum;
 
 import java.io.BufferedReader;
@@ -50,6 +54,7 @@ import org.apache.zookeeper.server.quorum.QuorumPeer.LearnerType;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 import org.apache.zookeeper.server.quorum.flexible.QuorumHierarchical;
 import org.apache.zookeeper.server.quorum.flexible.QuorumMaj;
+import org.apache.zookeeper.server.quorum.flexible.QuorumFlexible;
 import org.apache.zookeeper.server.quorum.flexible.QuorumVerifier;
 import org.apache.zookeeper.server.util.VerifyingFileFactory;
 
@@ -521,7 +526,11 @@ public class QuorumPeerConfig {
              * The default QuorumVerifier is QuorumMaj
              */        
             //LOG.info("Defaulting to majority quorums");
-            return new QuorumMaj(dynamicConfigProp);            
+           /**
+            * Changed to default QuorumFlexible
+            * <Max Meldrum>
+            */
+            return new QuorumFlexible(dynamicConfigProp);
         }          
     }
 
