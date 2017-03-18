@@ -84,13 +84,22 @@ public class QuorumFlexible implements QuorumVerifier {
         }
         half = votingMembers.size() / 2;
 
-        if (votingMembers.size() == 3) {
-            electionQuorum = (votingMembers.size() / 2);
-            atomicBroadcastQuorum = (votingMembers.size() /2);
-        } else if (votingMembers.size() == 5) {
-            electionQuorum = 2;
+        if (votingMembers.size() == 5) {
+            /**
+             * N = 5, Q1 = 4 , Q2 = 2
+             * The checks looks at > Q1/Q2
+             */
+            electionQuorum = 3;
+            atomicBroadcastQuorum = 1;
+        } else if (votingMembers.size() == 7) {
+            /**
+             * N = 7, Q1 = 5, Q2 = 3
+             * The checks looks at > Q1/Q2
+             */
+            electionQuorum = 4;
             atomicBroadcastQuorum = 2;
         } else {
+            // Else just go with majority
             electionQuorum = (votingMembers.size() / 2);
             atomicBroadcastQuorum = (votingMembers.size() /2);
         }
