@@ -124,11 +124,11 @@ public class QuorumFlexible implements QuorumVerifier {
             atomicBroadcastQuorum = 1;
         } else if (votingMembers == 7) {
             /**
-             * N = 7, Q1 = 5, Q2 = 3
+             * N = 7, Q1 = 6, Q2 = 2
              * The checks looks at > Q1/Q2
              */
-            electionQuorum = 4;
-            atomicBroadcastQuorum = 2;
+            electionQuorum = 5;
+            atomicBroadcastQuorum = 1;
         } else {
             // Else just go with majority
             electionQuorum = (votingMembers / 2);
