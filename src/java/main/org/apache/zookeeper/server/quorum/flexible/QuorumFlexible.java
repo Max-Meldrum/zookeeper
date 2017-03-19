@@ -71,6 +71,7 @@ public class QuorumFlexible implements QuorumVerifier {
 
     /**
      * Defines a majority to avoid computing it every time.
+     * <Max Meldrum> + sets values for Q1 and Q2
      *
      */
     public QuorumFlexible(Map<Long, QuorumServer> allMembers) {
@@ -83,26 +84,7 @@ public class QuorumFlexible implements QuorumVerifier {
             }
         }
         half = votingMembers.size() / 2;
-
-        if (votingMembers.size() == 5) {
-            /**
-             * N = 5, Q1 = 4 , Q2 = 2
-             * The checks looks at > Q1/Q2
-             */
-            electionQuorum = 3;
-            atomicBroadcastQuorum = 1;
-        } else if (votingMembers.size() == 7) {
-            /**
-             * N = 7, Q1 = 5, Q2 = 3
-             * The checks looks at > Q1/Q2
-             */
-            electionQuorum = 4;
-            atomicBroadcastQuorum = 2;
-        } else {
-            // Else just go with majority
-            electionQuorum = (votingMembers.size() / 2);
-            atomicBroadcastQuorum = (votingMembers.size() /2);
-        }
+        setQuorumValues(votingMembers.size());
     }
 
     public QuorumFlexible(Properties props) throws ConfigException {
@@ -125,6 +107,33 @@ public class QuorumFlexible implements QuorumVerifier {
             }
         }
         half = votingMembers.size() / 2;
+        setQuorumValues(votingMembers.size());
+    }
+
+    /**
+     * Sets Quorum for Leader Election and Atomic Broadcast
+     * <Max Meldrum>
+     */
+    private void setQuorumValues(int votingMembers) {
+        if (votingMembers == 5) {
+            /**
+             * N = 5, Q1 = 4 , Q2 = 2
+             * The checks looks at > Q1/Q2
+             */
+            electionQuorum = 3;
+            atomicBroadcastQuorum = 1;
+        } else if (votingMembers == 7) {
+            /**
+             * N = 7, Q1 = 5, Q2 = 3
+             * The checks looks at > Q1/Q2
+             */
+            electionQuorum = 4;
+            atomicBroadcastQuorum = 2;
+        } else {
+            // Else just go with majority
+            electionQuorum = (votingMembers / 2);
+            atomicBroadcastQuorum = (votingMembers /2);
+        }
     }
 
     /**
