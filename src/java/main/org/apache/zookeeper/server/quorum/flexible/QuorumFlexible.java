@@ -43,7 +43,12 @@ public class QuorumFlexible implements QuorumVerifier {
     private long version = 0;
     private int half;
     private String quorumSystem = "Flexible";
-    // Flexible Paxos : Q1 = 4, Q2 = 2
+    /**
+     * Default quorums to a 5 node ensemble,
+     * Q1 = 4, Q2 = 2
+     * Following ZooKeeper convention and using ">" instead of ">="
+     * So Q1 turns into 3 and Q2 to 1
+     */
     private int electionQuorum = 3;
     private int atomicBroadcastQuorum = 1;
 
@@ -72,7 +77,6 @@ public class QuorumFlexible implements QuorumVerifier {
     /**
      * Defines a majority to avoid computing it every time.
      * <Max Meldrum> + sets values for Q1 and Q2
-     *
      */
     public QuorumFlexible(Map<Long, QuorumServer> allMembers) {
         this.allMembers = allMembers;
@@ -104,28 +108,34 @@ public class QuorumFlexible implements QuorumVerifier {
                 }
             } else if (key.equals("version")) {
                 version = Long.parseLong(value, 16);
+            } else if (key.startsWith("leaderElectionQuorum")) {
+                electionQuorum = Integer.parseInt(value);
+            } else if (key.startsWith("atomicBroadcastQuorum")) {
+                atomicBroadcastQuorum = Integer.parseInt(value);
             }
         }
         half = votingMembers.size() / 2;
-        setQuorumValues(votingMembers.size());
     }
 
     /**
      * Sets Quorum for Leader Election and Atomic Broadcast
+     * if we don't specifiy it in zookeeper config
      * <Max Meldrum>
      */
     private void setQuorumValues(int votingMembers) {
         if (votingMembers == 5) {
             /**
              * N = 5, Q1 = 4 , Q2 = 2
-             * The checks looks at > Q1/Q2
+             * Following ZooKeeper convention and using ">" instead of ">="
+             * So Q1 turns into 3 and Q2 to 1
              */
             electionQuorum = 3;
             atomicBroadcastQuorum = 1;
         } else if (votingMembers == 7) {
             /**
              * N = 7, Q1 = 6, Q2 = 2
-             * The checks looks at > Q1/Q2
+             * Following ZooKeeper convention and using ">" instead of ">="
+             * So Q1 turns into 5 and Q2 to 1
              */
             electionQuorum = 5;
             atomicBroadcastQuorum = 1;
