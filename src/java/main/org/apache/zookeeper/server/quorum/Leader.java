@@ -587,11 +587,15 @@ public class Leader {
                     }
 
                     /**
-                     * Now it checks with the ElectionQuorum instead of a majority check
-                     * hasAllQuorums() -> hasAllElectionQuorums()
+                     * Now it checks with the Atomic Broadcast quorum instead of a majority check
+                     * hasAllQuorums() -> hasAllAtomicBroadcastQuorums()
+                     * We are checking if we have enough quorum for the replication phase, why?
+                     * In a case where we have lost the quorum for leader election but still have enough for replication,
+                     * we want to be able to continue replicating, and if we can bring another node up until the next leader election,
+                     * we will be fine.
                      * <Max Meldrum>
                      */
-                    if (!tickSkip && !syncedAckSet.hasAllElectionQuorums()) {
+                    if (!tickSkip && !syncedAckSet.hasAllAtomicBroadcastQuorums()) {
                         // Lost quorum of last committed and/or last proposed
                         // config, set shutdown flag
                         shutdownMessage = "Not sufficient followers synced, only synced with sids: [ "
