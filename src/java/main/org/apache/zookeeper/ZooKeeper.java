@@ -16,6 +16,10 @@
  * limitations under the License.
  */
 
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
 package org.apache.zookeeper;
 
 import java.io.IOException;
@@ -2177,11 +2181,11 @@ public class ZooKeeper {
      * @throws KeeperException
      * @throws InterruptedException
      */
-    public byte[] reconfig(String joiningServers, String leavingServers, String newMembers, long fromConfig, Stat stat) throws KeeperException, InterruptedException
+    public byte[] reconfig(String joiningServers, String leavingServers, String newMembers, int atomicBroadcastQuorum, long fromConfig, Stat stat) throws KeeperException, InterruptedException
     {
         RequestHeader h = new RequestHeader();
         h.setType(ZooDefs.OpCode.reconfig);
-        ReconfigRequest request = new ReconfigRequest(joiningServers, leavingServers, newMembers, fromConfig);
+        ReconfigRequest request = new ReconfigRequest(joiningServers, leavingServers, newMembers, atomicBroadcastQuorum, fromConfig);
         GetDataResponse response = new GetDataResponse();
         ReplyHeader r = cnxn.submitRequest(h, request, response, null);
         if (r.getErr() != 0) {

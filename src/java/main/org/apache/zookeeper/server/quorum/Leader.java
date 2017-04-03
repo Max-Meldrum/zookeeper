@@ -16,7 +16,17 @@
  * limitations under the License.
  */
 
+/**
+ * Modifications copyright (C) 2017 <Max Meldrum>
+ */
+
 package org.apache.zookeeper.server.quorum;
+
+// <Max Meldrum>
+import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.data.Stat;
+import org.apache.zookeeper.ZooKeeper;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -609,6 +619,18 @@ public class Leader {
                          *  the quorum for replication.
                          *  // updateReplicationQuorum(synckAckset.total)
                          */
+
+                        try {
+                            ZooKeeper zk = new ZooKeeper("127.0.0.1:3000", 3000, null);
+                            Stat stat = new Stat();
+                            byte[] curConfig = zk.reconfig(null,
+                                    null, null, totalAcks, -1, stat);
+                            LOG.info("Commited new atomic broadcast to config");
+
+                        } catch (KeeperException ex) {
+                            //err.println(ex.getMessage());
+                        }
+
                         // Lost quorum of last committed and/or last proposed
                         // config, set shutdown flag
                         shutdownMessage = "Not sufficient followers synced, only synced with sids: [ "
