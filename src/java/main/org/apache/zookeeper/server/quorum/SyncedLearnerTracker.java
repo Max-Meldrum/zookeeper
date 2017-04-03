@@ -49,6 +49,10 @@ public class SyncedLearnerTracker {
         return change;
     }
 
+    public int getNumberOfAcks() {
+        qvAcksetPairs
+    }
+
     public boolean hasAllQuorums() {
         for (QuorumVerifierAcksetPair qvAckset : qvAcksetPairs) {
             if (!qvAckset.getQuorumVerifier().containsQuorum(qvAckset.getAckset()))

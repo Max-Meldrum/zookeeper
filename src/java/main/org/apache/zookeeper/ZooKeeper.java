@@ -2172,6 +2172,27 @@ public class ZooKeeper {
         		fromConfig, stat);
     }
 
+    /** Copy of reconfig, except that we add to modify the replication quorum
+     *  <Max Meldrum>
+     * @throws KeeperException
+     * @throws InterruptedException
+     */
+    public byte[] reconfig(String joiningServers, String leavingServers, String newMembers, long fromConfig, Stat stat) throws KeeperException, InterruptedException
+    {
+        RequestHeader h = new RequestHeader();
+        h.setType(ZooDefs.OpCode.reconfig);
+        ReconfigRequest request = new ReconfigRequest(joiningServers, leavingServers, newMembers, fromConfig);
+        GetDataResponse response = new GetDataResponse();
+        ReplyHeader r = cnxn.submitRequest(h, request, response, null);
+        if (r.getErr() != 0) {
+            throw KeeperException.create(KeeperException.Code.get(r.getErr()), "");
+        }
+        if (stat != null) {
+            DataTree.copyStat(response.getStat(), stat);
+        }
+        return response.getData();
+    }
+
     /**
      * The Asynchronous version of reconfig. 
      *

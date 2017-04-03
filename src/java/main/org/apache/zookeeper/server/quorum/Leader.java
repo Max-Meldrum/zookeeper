@@ -580,9 +580,15 @@ public class Leader {
 
                     syncedAckSet.addAck(self.getId());
 
+                    // <Max Meldrum>
+                    // To keep track of how many nodes we are in contact with in case of a failure to
+                    // require a quorum for replication.
+                    int totalAcks = 1;
+
                     for (LearnerHandler f : getLearners()) {
                         if (f.synced()) {
                             syncedAckSet.addAck(f.getSid());
+                            totalAcks += 1;
                         }
                     }
 
@@ -596,6 +602,13 @@ public class Leader {
                      * <Max Meldrum>
                      */
                     if (!tickSkip && !syncedAckSet.hasAllAtomicBroadcastQuorums()) {
+                        /** TODO <Max Meldrum>
+                         *  To handle f +1 failures instead of 2f +1
+                         *  After Leader cannot get acknowledgement from all the nodes,
+                         *  get the total number of machines that still are in contact and dynamically reconfigure
+                         *  the quorum for replication.
+                         *  // updateReplicationQuorum(synckAckset.total)
+                         */
                         // Lost quorum of last committed and/or last proposed
                         // config, set shutdown flag
                         shutdownMessage = "Not sufficient followers synced, only synced with sids: [ "
