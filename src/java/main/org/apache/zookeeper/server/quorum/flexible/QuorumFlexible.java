@@ -43,14 +43,8 @@ public class QuorumFlexible implements QuorumVerifier {
     private long version = 0;
     private int half;
     private String quorumSystem = "Flexible";
-    /**
-     * Default quorums to a 5 node ensemble,
-     * Q1 = 4, Q2 = 2
-     * Following ZooKeeper convention and using ">" instead of ">="
-     * So Q1 turns into 3 and Q2 to 1
-     */
-    private int electionQuorum = 3;
-    private int atomicBroadcastQuorum = 1;
+    private int electionQuorum = 1;
+    private int atomicBroadcastQuorum = 3;
 
     public int hashCode() {
         assert false : "hashCode not designed";
@@ -88,7 +82,9 @@ public class QuorumFlexible implements QuorumVerifier {
             }
         }
         half = votingMembers.size() / 2;
-        setQuorumValues(votingMembers.size());
+        //setQuorumValues(votingMembers.size());
+        atomicBroadcastQuorum = half;
+        electionQuorum = half;
     }
 
     public QuorumFlexible(Properties props) throws ConfigException {
@@ -124,21 +120,11 @@ public class QuorumFlexible implements QuorumVerifier {
      */
     private void setQuorumValues(int votingMembers) {
         if (votingMembers == 5) {
-            /**
-             * N = 5, Q1 = 4 , Q2 = 2
-             * Following ZooKeeper convention and using ">" instead of ">="
-             * So Q1 turns into 3 and Q2 to 1
-             */
-            electionQuorum = 3;
-            atomicBroadcastQuorum = 1;
+            electionQuorum = 4;
+            atomicBroadcastQuorum = 2;
         } else if (votingMembers == 7) {
-            /**
-             * N = 7, Q1 = 6, Q2 = 2
-             * Following ZooKeeper convention and using ">" instead of ">="
-             * So Q1 turns into 5 and Q2 to 1
-             */
-            electionQuorum = 5;
-            atomicBroadcastQuorum = 1;
+            electionQuorum = 6;
+            atomicBroadcastQuorum = 2;
         } else {
             // Else just go with majority
             electionQuorum = (votingMembers / 2);
@@ -189,7 +175,7 @@ public class QuorumFlexible implements QuorumVerifier {
      * <Max Meldrum>
      */
     public boolean containsElectionQuorum(Set<Long> ackSet) {
-        return (ackSet.size() > electionQuorum);
+        return (ackSet.size() >= electionQuorum);
     }
 
     /**
@@ -197,7 +183,7 @@ public class QuorumFlexible implements QuorumVerifier {
      * <Max Meldrum>
      */
     public boolean containsAtomicBroadcastQuorum(Set<Long> ackSet) {
-        return (ackSet.size() > atomicBroadcastQuorum);
+        return (ackSet.size() >= atomicBroadcastQuorum);
     }
 
 

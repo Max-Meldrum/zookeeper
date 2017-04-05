@@ -622,20 +622,22 @@ public class Leader {
 
                         try {
                             ZooKeeper zk = new ZooKeeper("127.0.0.1:3000", 3000, null);
+                            long confVersion = self.getQuorumVerifier().getVersion();
                             Stat stat = new Stat();
                             byte[] curConfig = zk.reconfig(null,
-                                    null, null, totalAcks, -1, stat);
+                                    null, null, totalAcks, confVersion, stat);
                             LOG.info("Commited new atomic broadcast to config");
 
                         } catch (KeeperException ex) {
                             //err.println(ex.getMessage());
+                            break;
                         }
 
                         // Lost quorum of last committed and/or last proposed
                         // config, set shutdown flag
-                        shutdownMessage = "Not sufficient followers synced, only synced with sids: [ "
-                                + syncedAckSet.ackSetsToString() + " ]";
-                        break;
+                        //shutdownMessage = "Not sufficient followers synced, only synced with sids: [ "
+                         //       + syncedAckSet.ackSetsToString() + " ]";
+                       // break;
                     }
                     tickSkip = !tickSkip;
                 }
