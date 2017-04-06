@@ -173,6 +173,7 @@ public class QuorumFlexible implements QuorumVerifier {
      * <Max Meldrum>
      */
     public boolean containsElectionQuorum(Set<Long> ackSet) {
+        System.out.println("ELECTIONQUORUM: " + electionQuorum);
         return (ackSet.size() >= electionQuorum);
     }
 
@@ -181,6 +182,7 @@ public class QuorumFlexible implements QuorumVerifier {
      * <Max Meldrum>
      */
     public boolean containsAtomicBroadcastQuorum(Set<Long> ackSet) {
+        System.out.println("ATOMICBROADCASTQUORUM: " + atomicBroadcastQuorum);
         return (ackSet.size() >= atomicBroadcastQuorum);
     }
 
