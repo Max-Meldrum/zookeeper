@@ -43,8 +43,9 @@ public class QuorumFlexible implements QuorumVerifier {
     private long version = 0;
     private int half;
     private String quorumSystem = "Flexible";
+
     private int electionQuorum = 4;
-    private int atomicBroadcastQuorum = 2;
+    private int atomicBroadcastQuorum = 3;
 
     public int hashCode() {
         assert false : "hashCode not designed";
